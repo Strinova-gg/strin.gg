@@ -1,8 +1,9 @@
 const BASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 const BASE_SIZE = BigInt(BASE.length);
+const FALLBACK = "https://strinova.gg";
 
 export interface Env {
-  CUSTOM_SLUGS: KVNamespace;
+  URL_SHORTENER: KVNamespace;
 }
 
 function b64ToNumber(slug: string): bigint | null {
@@ -21,7 +22,7 @@ export default {
     const parts = pathname.split("/").filter(Boolean);
 
     if (parts.length < 2) {
-      return new Response("Not Found", { status: 404 });
+      return Response.redirect(FALLBACK, 302);
     }
 
     const [prefix, ...rest] = parts;
@@ -31,19 +32,19 @@ export default {
       const id = b64ToNumber(slug);
       if (id === null) return new Response("Bad Request", { status: 400 });
       const section = prefix === "m" ? "match" : "player";
-      return Response.redirect(`https://strinova.gg/${section}/${id}`, 301);
+      return Response.redirect(`${FALLBACK}/${section}/${id}`, 301);
     }
 
     if (prefix === "c") {
-      return Response.redirect(`https://strinova.gg/creator/${slug}`, 301);
+      return Response.redirect(`${FALLBACK}/creator/${slug}`, 301);
     }
 
     if (prefix === "cs") {
-      const value = await env.CUSTOM_SLUGS.get(slug);
-      if (value === null) return new Response("Not Found", { status: 404 });
-      return Response.redirect(`https://strinova.gg/${value}`, 301);
+      const value = await env.URL_SHORTENER.get(slug);
+      if (value === null) return Response.redirect(FALLBACK, 302);
+      return Response.redirect(`${FALLBACK}/${value}`, 301);
     }
 
-    return new Response("Not Found", { status: 404 });
+    return Response.redirect(FALLBACK, 302);
   },
 } satisfies ExportedHandler<Env>;

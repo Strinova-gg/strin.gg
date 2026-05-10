@@ -1,6 +1,6 @@
 const BASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 const BASE_SIZE = BigInt(BASE.length);
-const FALLBACK = "https://strinova.gg";
+const FALLBACK = "https://stringify.gg/";
 
 export interface Env {
   URL_SHORTENER: KVNamespace;

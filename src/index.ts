@@ -28,7 +28,7 @@ function buildMatchRedirectUrl(matchId: bigint, encodedFromPlayer: string | null
   const fromPlayerId = b64ToNumber(encodedFromPlayer);
   if (fromPlayerId === null) return null;
 
-  return new URL(`/share/match/${matchId}/${fromPlayerId}`, FALLBACK).toString();
+  return new URL(`/player/${fromPlayerId}/match/${matchId}`, FALLBACK).toString();
 }
 
 export default {

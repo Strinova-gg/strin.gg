@@ -28,8 +28,7 @@ function buildMatchRedirectUrl(matchId: bigint, encodedFromPlayer: string | null
   const fromPlayerId = b64ToNumber(encodedFromPlayer);
   if (fromPlayerId === null) return null;
 
-  redirectUrl.searchParams.set("fromPlayer", fromPlayerId.toString());
-  return redirectUrl.toString();
+  return new URL(`/share/match/${matchId}/${fromPlayerId}`, FALLBACK).toString();
 }
 
 export default {
